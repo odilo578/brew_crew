@@ -1,41 +1,39 @@
-import 'package:brew_crew/screens/authenticate/register.dart';
 import 'package:brew_crew/services/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
-class SignIn extends StatefulWidget {
-  const new({super.key});
 
+class Register extends StatefulWidget {
+   new({super.key});
+  
   @override
-  State<SignIn> createState() => _SignInState();
+  State<Register> createState() => _RegisterState();
 }
 
-class _SignInState extends State<SignIn> {
-
+class _RegisterState extends State<Register> {
+     String email = '';
+ String password = '';
   final AuthService _auth = AuthService();
-
-//text field state
-String email = '';
-String password = '';
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.brown.shade200,
       appBar: AppBar(
-        backgroundColor: Colors.brown.shade400,
-        elevation: 0.0,
-        title: Text('Sign in to Brew Crew'),
-      ),
+      title: Text('Sign up to Brew Crew'),
+      backgroundColor: Colors.brown.shade400,
+    ),
 
-      body: SingleChildScrollView(
+    body: SingleChildScrollView(
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
           child: Form(
+            key: _formKey,
             child: Column(
               children: [
                 SizedBox(height: 20,),
         
                 TextFormField(
+                  validator:(val)=> (val == null || val.isEmpty) ? 'Enter an email' : null,
                   onChanged: (val){
                     setState(()=> email = val);
                   },
@@ -43,6 +41,7 @@ String password = '';
                 SizedBox(height: 20,),
         
                 TextFormField(
+                  validator:(val)=> (val == null || val.length < 6) ? 'Enter a password 6+ char long' : null,
                   obscureText: true,
                   onChanged: (val){
                      setState(()=> password = val);
@@ -52,26 +51,27 @@ String password = '';
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(onPressed: (){
+                  if(_formKey.currentState?.validate()?? false){
                     print(email);
                     print(password);
+                  }
                   }, style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink
-                  ), child: Text('Sign in', style: TextStyle(color: Colors.white),))),
+                  ), child: Text('Sign Up', style: TextStyle(color: Colors.white),)),),
 
                   SizedBox(height: 30.0,),
-                  Text('Dont have an account yet?'),
+                  Text('If you already have an accout:'),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(onPressed: (){
-                 Get.to(()=> Register());
+                 
                   }, style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.pink.shade200
-                  ), child: Text('Create Account', style: TextStyle(color: Colors.white),)))
+                  ), child: Text('Login', style: TextStyle(color: Colors.white),)))
               ],
             ),
            ),
         ),
-      ),
-    );
+      ));
   }
 }
